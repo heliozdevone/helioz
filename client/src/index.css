@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: #050505;
+  color: #f97316;
+  font-family: ui-monospace, ui-monospace, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+#root {
+  height: 100%;
+}
+
+/* scanline overlay */
+body::before {
+  content: '';
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.12) 50%);
+  background-size: 100% 2px;
+  mix-blend-mode: overlay;
+}
