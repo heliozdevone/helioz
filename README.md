@@ -1,40 +1,40 @@
-```bash
-$ echo "HELIOZ"
- _____ _ _ _                      
-|  _  | | | |                     
-| | | | | | | ___  ___ ___  _ __  
-| | | | | | |/ _ \/ __/ _ \| '_ \ 
-\ \_/ / | | |  __/ (_| (_) | | | |
- \___/|_|_|_|\___|\___\___/|_| |_|
-
-$ echo "Helioz Dashboard — private AI agent control plane for BSC"
-Helioz Dashboard — private AI agent control plane for BSC
 ```
-
-```bash
-$ cat /dev/null <<'EOF'
-System overview
-- This repo is the control plane and web console for Helioz (dashboard + API).
-- Users define agents in the dashboard and deploy them to their own infrastructure (VPS / Docker / local).
-- Runtime execution happens on the user's infrastructure; Helioz only coordinates and stores config.
-- User prompts, API keys, agent data never touch the Helioz server during execution (zero-knowledge).
-- Helioz CLI (npm package `helioz` v1.3.1) provides a matching terminal UX.
-- Live at https://helioz.one
-EOF
-```
-
-```bash
-$ echo "Tech stack"
-Tech stack
-- Frontend: React 18, Vite, TypeScript, Tailwind CSS, shadcn/ui, Wouter, TanStack React Query v5
-- Backend: Express.js, TypeScript, express-session
-- Database: PostgreSQL, Drizzle ORM, @neondatabase/serverless
-- Auth: Privy SDK (email OTP login)
-- Visual: CRT terminal aesthetic (orange/amber on near-black, scanline overlay)
-```
-
-```bash
-$ tree -A -L 3
+██╗  ██╗███████╗██╗     ██╗ ██████╗ ███████╗
+██║  ██║██╔════╝██║     ██║██╔═══██╗╚══███╔╝
+███████║█████╗  ██║     ██║██║   ██║  ███╔╝
+██╔══██║██╔══╝  ██║     ██║██║   ██║ ███╔╝
+██║  ██║███████╗███████╗██║╚██████╔╝███████╗
+╚═╝  ╚═╝╚══════╝╚══════╝╚═╝ ╚═════╝ ╚══════╝
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+helioz-dashboard — Control Plane & Web Console
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+$ cat /helioz/description
+  Full-stack control plane for managing private AI agents on BSC.
+  Dashboard web console + runtime API + agent management system.
+  Built with React, Express, PostgreSQL, and Drizzle ORM.
+  CRT terminal aesthetic — orange monochrome, zero border-radius, pixel font.
+  Live at https://helioz.one
+$ helioz --status
+  SYSTEM          [ONLINE]
+  NETWORK         BSC Mainnet
+  AGENTS          12 live on public network
+  MODELS          30+ across 8 providers
+  CLI             v1.3.1 — npm install -g helioz
+  PRIVACY         strict — your data never leaves your server
+  ARCHITECTURE    control plane + self-hosted runtime
+  LICENSE         MIT
+$ cat /helioz/stack
+  FRONTEND        React 18 + Vite + TypeScript
+  STYLING         Tailwind CSS + shadcn/ui + CRT theme
+  FONT            GeistPixelSquare (custom pixel font)
+  ROUTING         Wouter
+  STATE           TanStack React Query v5
+  AUTH            Privy SDK (email OTP)
+  BACKEND         Express.js + TypeScript
+  DATABASE        PostgreSQL + Drizzle ORM + @neondatabase/serverless
+  SESSION         express-session + connect-pg-simple
+  RUNTIME         Node.js 20+
+$ tree helioz-dashboard/
 helioz-dashboard/
 ├── package.json
 ├── tsconfig.json
@@ -43,180 +43,292 @@ helioz-dashboard/
 ├── drizzle.config.ts
 ├── index.html
 ├── .env.example
+│
 ├── client/
 │   └── src/
-│       ├── App.tsx
-│       ├── index.css
-│       ├── main.tsx
+│       ├── App.tsx                    # Router + Privy provider setup
+│       ├── index.css                  # CRT theme, scanlines, glow effects
+│       ├── main.tsx                   # Entry point
+│       │
 │       ├── pages/
-│       │   ├── landing.tsx
-│       │   ├── login.tsx
-│       │   ├── install.tsx
-│       │   ├── docs.tsx
-│       │   ├── dashboard.tsx
-│       │   ├── agents.tsx
-│       │   ├── agent-detail.tsx
-│       │   ├── skills.tsx
-│       │   ├── privacy.tsx
-│       │   ├── deployments.tsx
-│       │   ├── playground.tsx
-│       │   └── not-found.tsx
+│       │   ├── landing.tsx            # Public landing — hero, agent ticker, features, CTA
+│       │   ├── login.tsx              # Privy email OTP login
+│       │   ├── install.tsx            # 6-step install tutorial
+│       │   ├── docs.tsx               # Full documentation — CLI, API, SDK, deployment
+│       │   ├── dashboard.tsx          # Overview — stats grid, agents, runs, deployments
+│       │   ├── agents.tsx             # Agent registry + 3-step spawn flow
+│       │   ├── agent-detail.tsx       # Agent config + deploy/stop controls
+│       │   ├── skills.tsx             # 15+ skills by category with toggles
+│       │   ├── privacy.tsx            # Privacy engine — score, model allowlist
+│       │   ├── deployments.tsx        # Deploy history + target distribution
+│       │   ├── playground.tsx         # Agent sandbox — chat, config, metadata
+│       │   └── not-found.tsx          # 404
+│       │
 │       ├── components/
-│       │   ├── ui/
-│       │   ├── app-sidebar.tsx
-│       │   └── dashboard-layout.tsx
+│       │   ├── ui/                    # shadcn components
+│       │   ├── app-sidebar.tsx        # Terminal-style sidebar navigation
+│       │   └── dashboard-layout.tsx   # Layout wrapper with scanlines + status bar
+│       │
 │       ├── hooks/
 │       │   └── use-toast.ts
+│       │
 │       └── lib/
-│           ├── auth.tsx
-│           ├── theme.tsx
-│           └── queryClient.ts
+│           ├── auth.tsx               # Privy auth context + session sync
+│           ├── theme.tsx              # Dark mode / CRT theme provider
+│           └── queryClient.ts         # TanStack Query config + API helpers
+│
 ├── server/
-│   ├── index.ts
-│   ├── routes.ts
-│   ├── storage.ts
-│   └── vite.ts
+│   ├── index.ts                       # Express entry point
+│   ├── routes.ts                      # All API routes + CLI file serving
+│   ├── storage.ts                     # Storage interface + in-memory implementation
+│   └── vite.ts                        # Vite dev server integration
+│
 ├── shared/
-│   └── schema.ts
+│   └── schema.ts                      # Drizzle schema + Zod types
+│
+├── helioz-cli/
+│   ├── bin/
+│   │   └── helioz.js                  # CLI source — published to npm as 'helioz'
+│   └── package.json                   # CLI package manifest
+│
 └── public/
+    ├── favicon.jpg
     └── fonts/
-        └── GeistPixelSquare.woff2
-```
-
-```bash
-$ cat <<'EOF'
-API routes (HTTP method + path)
-Public
-- GET  /api/public/live-agents        (community agent network, live run counts)
-- GET  /api/v1/dashboard             (dashboard summary, requires X-Helioz-Key)
-- GET  /install.sh                   (shell installer script)
-- GET  /cli/helioz.js                (CLI source)
-- GET  /cli/package.json             (CLI package manifest)
-
-Auth
-- POST /api/auth/privy               (Privy token verification + session create)
-- POST /api/auth/logout              (session logout)
-
-Agents
-- GET  /api/agents                   (list user agents)
-- GET  /api/agents/:id               (agent detail)
-- POST /api/agents                  (create agent)
-- PATCH /api/agents/:id             (update agent)
-- POST /api/agents/:id/deploy       (deploy agent: inactive→deploying→active)
-
-Runtime
-- GET  /api/skills                   (available skills list)
-- GET  /api/deployments              (deployment history)
-- GET  /api/privacy                  (privacy settings)
-- PUT  /api/privacy                  (update privacy settings)
-- GET  /api/api-key                  (get API key, hlz_live_ prefix)
-- POST /api/api-key/regenerate       (regenerate API key)
-- POST /api/playground              (playground chat endpoint)
-EOF
-```
-
-```bash
-$ cat .env.example
-DATABASE_URL="postgresql://user:pass@host:5432/dbname"
-SESSION_SECRET="64+ character secret"
-VITE_PRIVY_APP_ID="privy_app_id"
-PRIVY_APP_SECRET="privy_app_secret"
-HELIOZ_PUBLIC_URL="https://helioz.one"
-NODE_ENV="development"
-```
-
-```bash
-$ echo "Setup / installation"
-Setup / installation
-1) git clone https://github.com/heliozdevone/helioz-dashboard.git
-2) cd helioz-dashboard
-3) npm install
-4) cp .env.example .env
-   # fill in DATABASE_URL, SESSION_SECRET, VITE_PRIVY_APP_ID, PRIVY_APP_SECRET
-5) npm run db:push
-6) npm run dev
-   # or for production:
-   npm run build && npm start
-```
-
-```bash
-$ cat <<'EOF'
-Key features
-- Agent Builder (3-step spawn)
-  1) Identity: name, model, prompt
-  2) Runtime: skills, temperature, max tokens
-  3) Review: confirm config and create agent
-
-- 30+ AI models across 8 providers
-  OpenAI, Anthropic, Google, Meta, Mistral, DeepSeek, Cohere, xAI
-
-- 15+ modular skills
-  Chain Reader, Web Search, Code Interpreter, API Connector,
-  Docs Reader, Scheduler, ... (toggle on/off per agent)
-
-- Privacy Engine
-  Real-time privacy score (0–100), prompt redaction, local execution toggle,
-  model allowlist, zero-knowledge logging (agent data never stored)
-
-- Deployment system
-  One-click deploy, lifecycle management, multiple targets (VPS/Docker/local/cloud)
-
-- Live community network
-  12+ public BSC agents with real-time run counters
-
-- CLI integration
-  `helioz dashboard` renders full terminal dashboard using API data
-
-- Playground
-  Sandboxed agent testing with chat UI, config preview, metadata (model/latency/tools)
-
-- Full REST API
-  Authenticated via X-Helioz-Key for programmatic access
-EOF
-```
-
-```bash
-$ cat <<'EOF'
-Agent lifecycle
-- inactive
-  Agent exists in the registry but is not deployed.
-- deploying
-  Deployment request in progress, runtime is provisioning.
-- active
-  Agent is running and accepts requests (dashboard shows live status).
-- stopped
-  Deployment terminated, runtime can be resumed or redeployed.
-EOF
-```
-
-```bash
-$ cat <<'EOF'
-Privacy architecture
-- Control plane stores config, not secrets.
-- User prompts, API keys, and agent data are kept off Helioz servers during execution.
-- Execution happens on user infrastructure; Helioz only coordinates.
-- Privacy engine computes a live score based on:
-  - prompt content redaction
-  - model allowlist (per provider)
-  - local execution toggle
-  - zero-knowledge telemetry (no payload inspection)
-EOF
-```
-
-```bash
-$ cat <<'EOF'
-Links
-- https://helioz.one
-- https://www.npmjs.com/package/helioz (CLI v1.3.1)
-- https://helioz.one/install
-- https://helioz.one/docs
-EOF
-```
-
-```bash
-$ cat <<'EOF'
-License
-MIT License
-Copyright (c) 2026 Helioz
-EOF
-```
+        └── GeistPixelSquare.woff2     # Custom pixel font
+$ cat /helioz/architecture
+  ┌─────────────────────────────────────────────────────────────┐
+  │                     CONTROL PLANE                           │
+  │                   (this repository)                         │
+  │                                                             │
+  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────┐  │
+  │  │ Dashboard │  │ Agent    │  │ Privacy  │  │ Deploy    │  │
+  │  │ Console   │  │ Builder  │  │ Engine   │  │ Manager   │  │
+  │  └──────────┘  └──────────┘  └──────────┘  └───────────┘  │
+  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌───────────┐  │
+  │  │ Skill    │  │ Model    │  │ API Key  │  │ Playground│  │
+  │  │ Registry │  │ Router   │  │ Manager  │  │ Sandbox   │  │
+  │  └──────────┘  └──────────┘  └──────────┘  └───────────┘  │
+  │                                                             │
+  │  REST API ──── X-Helioz-Key auth ──── PostgreSQL            │
+  └───────────────────────┬─────────────────────────────────────┘
+                          │
+                    config + monitoring
+                          │
+  ┌───────────────────────┴─────────────────────────────────────┐
+  │                    YOUR INFRASTRUCTURE                      │
+  │                                                             │
+  │  ┌──────────────────────────────────────────────────────┐   │
+  │  │  Agent Runtime                                       │   │
+  │  │  ├── Executes prompts locally                        │   │
+  │  │  ├── Calls AI models directly                        │   │
+  │  │  ├── Runs skills (chain reader, web search, etc.)    │   │
+  │  │  └── Your API keys, your data, your server           │   │
+  │  └──────────────────────────────────────────────────────┘   │
+  │                                                             │
+  │  VPS  │  Docker  │  Local Machine  │  Helioz Cloud          │
+  └─────────────────────────────────────────────────────────────┘
+$ cat /helioz/api-routes
+  PUBLIC
+  ├── GET  /api/public/live-agents         Community agent network (12+ BSC agents)
+  ├── GET  /api/v1/dashboard               Dashboard data (X-Helioz-Key auth)
+  ├── GET  /install.sh                     Shell installer script
+  ├── GET  /cli/helioz.js                  CLI source file
+  └── GET  /cli/package.json               CLI package manifest
+  AUTH
+  ├── POST /api/auth/privy                 Privy token verification + session
+  └── POST /api/auth/logout                Session logout
+  AGENTS
+  ├── GET  /api/agents                     List user agents
+  ├── GET  /api/agents/:id                 Get agent detail
+  ├── POST /api/agents                     Create agent
+  ├── PATCH /api/agents/:id                Update agent config
+  └── POST /api/agents/:id/deploy          Deploy agent
+  RUNTIME
+  ├── GET  /api/skills                     Available skills list
+  ├── GET  /api/deployments                Deployment history
+  ├── GET  /api/privacy                    Privacy settings
+  ├── PUT  /api/privacy                    Update privacy settings
+  ├── GET  /api/api-key                    Get user API key (hlz_live_ format)
+  ├── POST /api/api-key/regenerate         Regenerate API key
+  └── POST /api/playground                 Playground chat endpoint
+$ cat /helioz/features
+  AGENT MANAGEMENT
+  ├── 3-step spawn flow — identity, runtime config, review
+  ├── Multi-model support — 30+ models across 8 providers
+  │   ├── OpenAI       gpt-4o, gpt-4-turbo, gpt-3.5-turbo
+  │   ├── Anthropic    claude-3.5-sonnet, claude-3-sonnet, claude-3-haiku
+  │   ├── Google       gemini-2.0-flash, gemini-1.5-pro
+  │   ├── Meta         llama-3.3-70b, llama-3.1-8b
+  │   ├── Mistral      mistral-large, mistral-medium, mixtral-8x7b
+  │   ├── DeepSeek     deepseek-r1, deepseek-v3
+  │   ├── Cohere       command-r-plus, command-r
+  │   └── xAI          grok-2, grok-2-mini
+  ├── Custom system prompts and temperature control
+  └── Agent lifecycle: inactive → deploying → active → stopped
+  SKILL SYSTEM
+  ├── Chain Reader      Read on-chain data from BSC and EVM chains
+  ├── Web Search        Search the internet for real-time information
+  ├── Code Interpreter  Execute and analyze code snippets
+  ├── API Connector     Connect to external REST APIs
+  ├── Docs Reader       Parse and analyze documentation
+  ├── Scheduler         Time-based task execution
+  ├── Data Analyzer     Process and visualize datasets
+  ├── Memory Store      Persistent agent memory across runs
+  ├── Notification      Alert via webhook, email, or Telegram
+  ├── File Manager      Read and write files in agent workspace
+  ├── Image Analyzer    Process and analyze images
+  ├── Wallet Connector  Interact with BSC wallets
+  ├── DEX Aggregator    Query decentralized exchange data
+  ├── Price Oracle      Real-time token price feeds
+  └── Gas Optimizer     Optimize transaction gas on BSC
+  PRIVACY ENGINE
+  ├── Real-time privacy score (0–100)
+  ├── Prompt redaction toggle
+  ├── Local execution enforcement
+  ├── Model allowlist by provider
+  └── Zero-knowledge logging mode
+  DEPLOYMENT
+  ├── One-click deploy from dashboard
+  ├── VPS, Docker, local, Helioz Cloud targets
+  ├── systemd service generation via CLI
+  └── Health monitoring and auto-restart
+  MONITORING
+  ├── Live agent status tracking
+  ├── Run history with full audit trail
+  ├── Token usage and cost metrics
+  └── Real-time error reporting
+  COMMUNITY NETWORK
+  └── Public live-agents board with 12+ BSC-focused agents
+      ├── DeFi Yield Scanner          ├── Token Launch Monitor
+      ├── NFT Sniper Bot              ├── Portfolio Rebalancer
+      ├── Governance Tracker          ├── Liquidation Guardian
+      ├── Whale Alert Agent           ├── MEV Detector
+      ├── Smart Contract Auditor      ├── Airdrop Hunter
+      ├── Alpha Signal Bot            └── Bridge Monitor
+$ cat /helioz/agent-lifecycle
+  ┌──────────┐    deploy    ┌───────────┐   3s    ┌────────┐
+  │ INACTIVE │ ──────────►  │ DEPLOYING │ ─────►  │ ACTIVE │
+  └──────────┘              └───────────┘         └────────┘
+       ▲                                               │
+       │                    stop                       │
+       └───────────────────────────────────────────────┘
+  inactive     Agent created, not yet deployed
+  deploying    Build in progress (3-second provisioning)
+  active       Running, visible on public live-agents board
+  stopped      Manually stopped, can be re-deployed
+$ cat /helioz/privacy-architecture
+  ZERO-KNOWLEDGE DESIGN
+  The control plane (this repo) handles:
+  ├── Agent configuration and metadata
+  ├── Skill registry and model routing
+  ├── Deployment orchestration
+  ├── Monitoring and status tracking
+  └── API key management
+  The control plane NEVER touches:
+  ├── Your prompts or system instructions
+  ├── Your AI model API keys
+  ├── Your agent execution data
+  ├── Your wallet private keys
+  └── Your runtime logs or outputs
+  All agent execution happens on YOUR infrastructure.
+  The control plane only sends config. The runtime only sends status.
+  This is not a policy. This is the architecture.
+$ cat /helioz/env.example
+  DATABASE_URL=postgresql://user:pass@host:5432/helioz
+  SESSION_SECRET=random-64-char-string
+  VITE_PRIVY_APP_ID=your-privy-app-id
+  PRIVY_APP_SECRET=your-privy-secret
+  HELIOZ_PUBLIC_URL=https://helioz.one
+  NODE_ENV=production
+$ cat /helioz/setup
+  # Clone
+  git clone https://github.com/heliozdevone/helioz-dashboard.git
+  cd helioz-dashboard
+  # Install dependencies
+  npm install
+  # Configure environment
+  cp .env.example .env
+  # Edit .env with your database URL, Privy keys, session secret
+  # Push database schema
+  npm run db:push
+  # Development (starts Express + Vite on port 5000)
+  npm run dev
+  # Production
+  npm run build
+  npm start
+$ cat /helioz/cli-quickstart
+  # Install CLI globally
+  npm install -g helioz
+  # Authenticate with your API key
+  helioz auth set-key hlz_live_<your-key>
+  # Initialize workspace
+  mkdir ~/helioz-agents && cd ~/helioz-agents
+  helioz init
+  # Pull agent config from control plane
+  helioz agent pull <agent-id>
+  # Start agent runtime
+  helioz agent start <agent-id>
+  # View terminal dashboard
+  helioz dashboard
+  # Check agent status
+  helioz agent status <agent-id>
+  # Stop agent
+  helioz agent stop <agent-id>
+$ curl -s https://helioz.one/api/v1/dashboard \
+    -H "X-Helioz-Key: hlz_live_your_key" | jq .
+  {
+    "status": "ok",
+    "summary": {
+      "totalAgents": 3,
+      "activeAgents": 2,
+      "totalRuns": 847,
+      "skills": 8,
+      "deployments": 5
+    },
+    "agents": [
+      {
+        "id": "agent-1",
+        "name": "DeFi Scanner",
+        "model": "gpt-4o",
+        "status": "active",
+        "runsCount": 312,
+        "skills": ["Chain Reader", "API Connector"],
+        "deployedAt": "2026-03-01T00:00:00.000Z"
+      }
+    ],
+    "endpoint": "https://helioz.one",
+    "version": "1.3.1",
+    "timestamp": "2026-03-08T12:00:00.000Z"
+  }
+$ cat /helioz/design-system
+  AESTHETIC        CRT terminal — retro monitor look
+  PRIMARY COLOR    #f97316 (orange/amber)
+  BACKGROUND       near-black (#0a0a0a)
+  FONT             GeistPixelSquare (pixel monospace)
+  BORDER RADIUS    0px (zero rounded corners everywhere)
+  EFFECTS          CRT scanlines overlay, text glow, logo pulse
+  INDICATORS       [ONLINE] [OFFLINE] [DEPLOY] bracket-style labels
+  SWITCHES         [ON] / [OFF] toggle labels
+$ cat /helioz/links
+  Dashboard        https://helioz.one
+  Install Guide    https://helioz.one/install
+  Documentation    https://helioz.one/docs
+  npm Package      https://www.npmjs.com/package/helioz
+  GitHub           https://github.com/heliozdevone
+  X / Twitter      https://x.com/Helioz_one
+  CLI Install      npm install -g helioz
+$ cat /helioz/license
+  MIT License
+  Copyright (c) 2026 Helioz
+  Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this software and associated documentation files, to deal
+  in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense,
+  and/or sell copies of the Software, subject to the following conditions:
+  The above copyright notice and this permission notice shall be included
+  in all copies or substantial portions of the Software.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Built for builders. Owned by operators.
+  Your agents. Your data. Your infrastructure.
+  https://helioz.one  ·  npm install -g helioz  ·  @Helioz_one
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
